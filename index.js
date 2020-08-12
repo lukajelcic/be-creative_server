@@ -37,18 +37,10 @@ app.post('/newIdea', (req, res) => {
             return res.status(200).json(resIdea);
         })
         .then(() => {
-            return db.doc(`categories/${req.body.category}`)
-                .set(
-                    {
-                        ['idea' + newIdea.num]:
-                        {
-                            'idea_name': newIdea.shortDescription,
-                            'idea_id': newIdea.ideaId
-                        }
-
-                    },
-                    { merge: true }
-                )
+            return db
+                .doc(`categories/${req.body.category}`)
+                .collection('ideas')
+                .doc(`${newIdea.ideaId}`).set({ newIdea }, { merge: true });
         })
         .catch(err => {
             res.status(500).json({ message: `Something went wrong` })
@@ -134,7 +126,6 @@ app.get('/categories', (req, res) => {
             data.forEach(doc => {
                 categories.push({
                     categoryId: doc.id,
-                    ideas: doc.data()
                 })
             })
             return res.status(200).json(categories);
