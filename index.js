@@ -148,15 +148,18 @@ app.post('/newCategory', (req, res) => {
     const newCategory = {
         categoryName: req.body.categoryName
     }
-    db.collection('categories')
-        .add(newCategory)
-        .then(doc => {
-            const resCategory = newCategory;
-            resCategory.categoryId = doc.id;
-            return res.status(200).json(resCategory);
+    if (newCategory.categoryName.exists) {
+        return res.status(404).json({ message: 'Category name already exist' });
+    }
+
+    db.collection('categories').doc(`${newCategory.categoryName}`).set({
+        'categoryId': newCategory.categoryName
+    }, { merge: true })
+        .then(() => {
+            return res.status(200).json(newCategory)
         })
         .catch(err => {
-            return res.status(500).json({ error: err.code })
+            return res.status(400).json({ error: err.code })
         })
 });
 
