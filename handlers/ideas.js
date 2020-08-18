@@ -88,7 +88,7 @@ exports.deleteIdea = (req, res) => {
         })
         .then(() => {
             //Get category name to delete doc
-            return db.collection('categories').doc().collection('ideas')
+            return db.collection('categories').doc('work').collection('ideas')
                 .where('ideaId', '==', `${req.params.ideaId}`)
                 .onSnapshot((snapshot) => {
                     snapshot.forEach(result => result.ref.delete())
