@@ -30,6 +30,7 @@ exports.getIdeas = (req, res) => {
 //ADD IDEA
 exports.addIdea = (req, res) => {
     const newIdea = {
+        username: req.user.username,
         num: req.body.num,
         shortDescription: req.body.shortDescription,
         longDescription: req.body.longDescription,

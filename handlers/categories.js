@@ -1,9 +1,4 @@
 const { db, admin } = require('../utils/admin');
-const config = require('../utils/config');
-const firebase = require('firebase');
-
-firebase.initializeApp(config);
-
 
 //GET CATEGORIES
 exports.getCategories = (req, res) => {
