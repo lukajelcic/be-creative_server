@@ -5,7 +5,8 @@ app.use(cors());
 
 const {
     signup,
-    login
+    login,
+    getUser
 } = require('./handlers/users');
 
 const {
@@ -23,21 +24,23 @@ const {
 } = require('./handlers/categories');
 
 const FbAuth = require('./utils/fbAuth');
+const fbAuth = require('./utils/fbAuth');
 
 //USER ROUTES
 app.post('/login', login);
 app.post('/signup', signup);
+app.get('/user/:username', getUser);
 
 //IDEA ROUTES
 app.post('/newIdea', FbAuth, addIdea);
 app.get('/ideas', FbAuth, getIdeas);
-app.get('/ideas/:ideaId', getIdea);
-app.delete('/ideas/:ideaId', deleteIdea);
-app.put('/ideas/:ideaId', updateIdea);
+app.get('/ideas/:ideaId', FbAuth, getIdea);
+app.delete('/ideas/:ideaId', FbAuth, deleteIdea);
+app.put('/ideas/:ideaId', FbAuth, updateIdea);
 
 //CATEGORY ROUTES
 app.get('/categories', getCategories);
-app.post('/newCategory', addCategory);
+app.post('/newCategory', FbAuth, addCategory);
 app.delete('/categories/:categoryId', deleteCategory);
 
 

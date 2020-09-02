@@ -72,3 +72,37 @@ exports.login = (req, res) => {
             return res.status(400).json({ message: 'Wrong credentials' })
         })
 }
+
+exports.getUser = (req, res) => {
+    let userData = {};
+    db.doc(`/users/${req.params.username}`).get()
+        .then(doc => {
+            if (doc.exists) {
+                userData.user = doc.data();
+                return db.collection('ideas').where('username', '==', req.params.username).get()
+            } else {
+                return res.status(404).json({ error: 'User not found' })
+            }
+        })
+        .then(data => {
+            userData.ideas = [];
+            data.forEach(doc => {
+                userData.ideas.push({
+                    num: doc.data().num,
+                    shortDescription: doc.data().shortDescription,
+                    longDescription: doc.data().longDescription,
+                    rate: doc.data().rate,
+                    expetacions: doc.data().expetacions,
+                    createdAt: doc.data().createdAt,
+                    category: doc.data().category,
+                    username: doc.data().username,
+                    ideaId: doc.id
+                });
+            })
+            return res.json(userData);
+        })
+        .catch(err => {
+            console.log(err);
+            return res.status(500).json({ error: err.code });
+        })
+}

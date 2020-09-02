@@ -108,6 +108,7 @@ exports.updateIdea = (req, res) => {
         expetacions: req.body.expetacions,
         createdAt: new Date().toISOString(),
     }
+    if (updatedIdea == null) return res.status(404).json({ error: 'Idea not found' })
     const document = db.doc(`/ideas/${req.params.ideaId}`)
     document.update(updatedIdea)
         .then(() => {
