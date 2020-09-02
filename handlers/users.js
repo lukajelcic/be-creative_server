@@ -73,6 +73,7 @@ exports.login = (req, res) => {
         })
 }
 
+//GET USER INFORMATION
 exports.getUser = (req, res) => {
     let userData = {};
     db.doc(`/users/${req.params.username}`).get()
